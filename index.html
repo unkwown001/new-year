@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Shreya — New Year</title>
+
+<style>
+:root{
+  --bg:#cfe4ff;
+  --text:#2b2b2b;
+  --muted:#6b7280;
+  --accent:#3fc9a4;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+main{
+  max-width:720px;
+  margin:auto;
+  padding:100px 22px 200px;
+}
+
+/* sections */
+.section{
+  margin:120px 0;
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s cubic-bezier(.2,.8,.2,1);
+}
+
+.section.show{
+  opacity:1;
+  transform:none;
+}
+
+/* FINAL SECTION — hidden until click */
+#final{
+  opacity:0;
+  transform:translateY(40px);
+}
+
+#final.show{
+  opacity:1;
+  transform:none;
+  transition:1s cubic-bezier(.2,.8,.2,1);
+}
+
+/* typography */
+h1{font-size:2.8rem;font-weight:700;letter-spacing:-0.02em;}
+h2{font-size:2rem;font-weight:600;margin-bottom:16px;}
+p{font-size:1.05rem;line-height:1.8;color:var(--muted);}
+.accent{color:var(--accent);font-weight:600;}
+
+/* button */
+button{
+  margin-top:36px;
+  padding:14px 30px;
+  border-radius:999px;
+  border:none;
+  background:var(--accent);
+  color:#053b2f;
+  font-size:.95rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 24px rgba(0,0,0,.12);
+}
+
+/* stickers */
+.sticker{
+  position:fixed;
+  width:90px;
+  border-radius:18px;
+  cursor:grab;
+  user-select:none;
+  touch-action:none;
+  animation:float 7s ease-in-out infinite;
+  filter:drop-shadow(0 16px 26px rgba(0,0,0,.18));
+}
+
+#s1{top:18%;left:6%;}
+#s2{top:55%;right:6%;animation-delay:1.5s;}
+#s3{bottom:14%;left:10%;animation-delay:3s;}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-16px)}
+}
+
+/* confetti */
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  border-radius:3px;
+  pointer-events:none;
+  animation:confetti 1.7s ease-out forwards;
+}
+
+@keyframes confetti{
+  from{opacity:1;transform:translateY(0) rotate(0deg);}
+  to{opacity:0;transform:translateY(-160px) rotate(540deg);}
+}
+</style>
+</head>
+
+<body>
+
+<img src="hamster.png" class="sticker" id="s1">
+<img src="cat1.jpeg" class="sticker" id="s2">
+<img src="cat2.jpeg" class="sticker" id="s3">
+
+<main>
+
+<section class="section">
+  <h1>Hey <span class="accent">Shreya Shalini</span> 🌤️</h1>
+  <p style="margin-top:22px">
+    This isn’t a post.  
+    Not a story.  
+    Just something small I made — because you matter.
+  </p>
+</section>
+
+<section class="section">
+  <h2>About this year</h2>
+  <p>
+    This year has been a year of struggles, ups-downs, disappointments
+    and also of memories, lessons and tries.
+    Let us remember the good as well as the bad things that happened
+    and embrace them as we move forward.
+  </p>
+</section>
+
+<section class="section">
+  <h2>Next year, deal?</h2>
+  <p>
+    Let us be idiotic, crazy, and fight like we do —
+    but stay together.
+  </p>
+  <p style="margin-top:16px">
+    Even if we are upset by each other.  
+    Even if we fall down.  
+    We come back to our feet.
+  </p>
+</section>
+
+<section class="section">
+  <h2>Because honestly</h2>
+  <p>
+    Let us make our few last years of teenage lives,
+    <span class="accent">MEMORABLE</span>.
+  </p>
+  <button id="magic">tap gently ✨</button>
+</section>
+
+<section class="section" id="final">
+  <h1>Happy New Year 🎉</h1>
+  <h2 class="accent">Shreya Shalini</h2>
+  <p style="margin-top:16px">
+    Always on your side.  
+    Even when we’re annoying each other.
+  </p>
+</section>
+
+</main>
+
+<script>
+// reveal on scroll (excluding final)
+const sections=document.querySelectorAll(".section:not(#final)");
+const reveal=()=>sections.forEach(s=>{
+  if(s.getBoundingClientRect().top<innerHeight*.85)s.classList.add("show");
+});
+addEventListener("scroll",reveal);
+addEventListener("load",reveal);
+
+// draggable stickers
+document.querySelectorAll(".sticker").forEach(st=>{
+  let d=false,ox,oy;
+  st.addEventListener("pointerdown",e=>{
+    d=true;
+    ox=e.clientX-st.offsetLeft;
+    oy=e.clientY-st.offsetTop;
+  });
+  addEventListener("pointermove",e=>{
+    if(!d)return;
+    st.style.left=e.clientX-ox+"px";
+    st.style.top=e.clientY-oy+"px";
+  });
+  addEventListener("pointerup",()=>d=false);
+});
+
+// button magic
+document.getElementById("magic").onclick=e=>{
+  // confetti burst
+  for(let i=0;i<70;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*innerWidth+"px";
+    c.style.top=innerHeight+"px";
+    c.style.background=`hsl(${Math.random()*360},80%,70%)`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),1800);
+  }
+
+  // reveal final section
+  const final=document.getElementById("final");
+  final.classList.add("show");
+  final.scrollIntoView({behavior:"smooth"});
+};
+</script>
+
+</body>
+</html>
